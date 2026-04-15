@@ -43,11 +43,12 @@ async def predict_image_class(file: UploadFile = File(...)) -> Prediction:
     try:
         prediction = predict_image(input)
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Failed to Predict Image")
+        raise HTTPException(status_code=500, detail="Failed to Predict Image: " + str(e))
     
     #Validate Result fits 1 or 0 (real or fake)
     if prediction["result"] != 0 or prediction["result"] != 1:
         HTTPException(status_code=500, detail="Invalid prediction result") 
+        
     #Validate Probabilities fall within proper range, 0-100%
     if not 0 <= prediction["probability_real"] <= 1:
         raise HTTPException(status_code=500, detail="Invalid prediction result") 

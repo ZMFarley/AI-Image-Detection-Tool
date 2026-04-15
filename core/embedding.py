@@ -130,7 +130,7 @@ def convert_input_image(input: bytes) -> np.ndarray:
     embedder = Embedder()
     #Convert incoming image bytes to image and Open image
     bytes_to_image = BytesIO(input)
-    image = [Image.open(bytes_to_image)]
+    image = [Image.open(bytes_to_image).convert("RGB")]
     embedding = embedder._embed(image)
     return embedding
 

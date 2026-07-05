@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from 'react'
+import { useState, type ChangeEvent, useRef } from 'react'
 import axios from 'axios';
 import loadingSpinner from "./loading_spinner.svg"
 /* Type to hold prediction from model from API request */
@@ -14,6 +14,7 @@ export default function UploadFile() {
     const [image, setImage] = useState<string | null>(null); /* State to hold image file */
     const [page, setPage] = useState<"submit" | "loading" | "analysis">("submit"); /* State to hold current active page for display*/
     const [response, setResponse] = useState<Prediction | null>(null); /* State to hold output of classifier from API request */
+    const imageRef = useRef<HTMLInputElement>(null);
     /* Image Handling Function Section */
     function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
         //Accepts image from file explorer, stores its url for later use
@@ -21,6 +22,20 @@ export default function UploadFile() {
             setFile(e.target.files[0]);
             setImage(URL.createObjectURL(e.target.files[0]));
         }
+    }
+
+    /* Delete Image */ 
+    function handleDeleteImage() {
+        if(image){
+            URL.revokeObjectURL(image);
+        }
+
+        if(imageRef.current){
+            imageRef.current.value = "";
+        }
+        setFile(null);
+        setImage(null);
+
     }
     
     /* API POST request to send image and recieve prediction */
@@ -52,12 +67,18 @@ export default function UploadFile() {
                     </header>
                     {/*Input section for image*/}
                     <main className="container">
-                        <section className="left">to be filled</section>
+                        <section className="left">
+                        {/*Prompt user to input image, and display it on the screen*/}
+                        <input ref={imageRef} type="file" accept = "image/*" onChange={handleImageChange}/>
+            
+                        </section>
                         <div className="dividing-line"></div>   
-                        <section className="right">To be filled</section>
+                        <section className="right">
+                            {image && (<img alt="Preview image" src={image} width="500" height="auto"/>)}
+                        </section>
                     </main>
                     <div className="button-container">
-                        <button className="delete-button">Delete Image</button>
+                        <button className="delete-button" onClick={handleDeleteImage}>Delete Image</button>
                         <button className="transition-button" onClick={uploadImage}>Click To Submit to the detector</button>
                     </div>
                 </div> )}

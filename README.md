@@ -8,8 +8,6 @@ Most importantly, this project runs on Python 3.11, necessitating the use of the
 
 More specifically, for quick and effective operation of the training and testing modules, pytorch MUST be run with GPU enabled, and cuda 12.1 installed with respect to pytorch. Operating on CPU significantly delays embedding time, and will reduce the effectiveness of the modules.
 
-install the required pytorch using the following command: pip install --index-url https://download.pytorch.org/whl/cu121 torch==2.5.1+cu121 torchvision==0.20.1+cu121 torchaudio==2.5.1+cu121
-
 As such, ensure the operating machine has Python 3.11 installed, and use the following commands: -m venv .venv to create a virtual enviornment, and .\.venv\Scripts\activate, to allow for its operation.
 
 Due to issues in running pytorch with 3.13, this project must be ran in a virtual enviornment, using python 3.11, create the folder using python3.11 -m venv .venv and .\.venv\Scripts\activate, deactivate to turn it off.

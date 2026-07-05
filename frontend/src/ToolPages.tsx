@@ -45,17 +45,20 @@ export default function UploadFile() {
         <div>
             {/*Section for image input and submission to model*/}
             {page === "submit" && (
-                <div className="center">
-                    <h1 className="title">AI Image Detection Tool</h1>
-                    <h2>This tool will intake whatever image desired, and determine if it is AI generated or not!</h2>
+                <div className="page">
+                    <header>
+                        <h1 className="title">AI Image Detection Tool</h1>
+                        <h2 className="subtitle">This tool will intake whatever image desired, and determine if it is AI generated or not!</h2>
+                    </header>
                     {/*Input section for image*/}
-                    <div className="center">
-                        {/*Prompt user to input image, and display it on the screen*/}
-                        {image && (<img alt="Preview image" src={image} width="500" height="auto"/>)}
-                        <input type="file" accept = "image/*" onChange={handleImageChange}/>
+                    <main className="container">
+                        <section className="left">to be filled</section>
+                        <div className="dividing-line"></div>   
+                        <section className="right">To be filled</section>
+                    </main>
+                    <div className="button-container">
+                        <button className="starting-button" onClick={uploadImage}>Click To Submit to the detector</button>
                     </div>
-            
-                    <button className="startingButton" onClick={uploadImage}>Click To Submit to the detector</button>
                 </div> )}
 
                 {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
@@ -79,7 +82,7 @@ export default function UploadFile() {
 
                     </div>  
             
-                    <button className="startingButton" onClick={() => setPage("submit")}>Click to test another image!</button>
+                    <button className="starting-button" onClick={() => setPage("submit")}>Click to test another image!</button>
                 </div> )}
 
         </div>

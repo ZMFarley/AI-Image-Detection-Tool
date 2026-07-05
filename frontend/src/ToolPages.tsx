@@ -104,7 +104,7 @@ export default function UploadFile() {
 
                     </div>  
             
-                    <button className="transition-button" onClick={() => setPage("submit")}>Click to test another image!</button>
+                    <button className="transition-button" onClick={() =>  {handleDeleteImage(); setPage("submit");}}>Click to test another image!</button>
                 </div> )}
 
         </div>

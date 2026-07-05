@@ -57,7 +57,8 @@ export default function UploadFile() {
                         <section className="right">To be filled</section>
                     </main>
                     <div className="button-container">
-                        <button className="starting-button" onClick={uploadImage}>Click To Submit to the detector</button>
+                        <button className="delete-button">Delete Image</button>
+                        <button className="transition-button" onClick={uploadImage}>Click To Submit to the detector</button>
                     </div>
                 </div> )}
 
@@ -82,7 +83,7 @@ export default function UploadFile() {
 
                     </div>  
             
-                    <button className="starting-button" onClick={() => setPage("submit")}>Click to test another image!</button>
+                    <button className="transition-button" onClick={() => setPage("submit")}>Click to test another image!</button>
                 </div> )}
 
         </div>

@@ -59,7 +59,10 @@
 .button-container{
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
+
 .transition-button{
   font-family: 'Courier New', Courier, monospace;
   margin: 1rem;
@@ -67,4 +70,15 @@
   font-size: 1rem;
   border-radius: 6px;
   font-weight: bolder;
+}
+
+.delete-button{
+  font-family: 'Courier New', Courier, monospace;
+  margin: 1rem;
+  padding: 8px 14px;       
+  font-size: 1rem;
+  border-radius: 6px;
+  font-weight: bolder;
+  color: black;
+  background-color: red;
 }

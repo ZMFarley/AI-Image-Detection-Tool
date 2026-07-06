@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, useRef } from 'react'
 import axios from 'axios';
-import loadingSpinner from "./loading_spinner.svg"
+import LoadingPanel from './LoadingPanel';
 /* Type to hold prediction from model from API request */
 type Prediction = {
     result: number;
@@ -8,13 +8,14 @@ type Prediction = {
     probAI: number;
 };
 
-export default function UploadFile() {
+export default function ImageDetectionTool() {
     /* Use State Section */
     const [file, setFile] = useState<File | null>(null); /* State to hold image file */
     const [image, setImage] = useState<string | null>(null); /* State to hold image file */
     const [page, setPage] = useState<"submit" | "loading" | "analysis">("submit"); /* State to hold current active page for display*/
     const [response, setResponse] = useState<Prediction | null>(null); /* State to hold output of classifier from API request */
     const imageRef = useRef<HTMLInputElement>(null);
+
     /* Image Handling Function Section */
     function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
         //Accepts image from file explorer, stores its url for later use
@@ -88,14 +89,7 @@ export default function UploadFile() {
                 </div> )}
 
                 {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
-                {page === "loading" && (
-                <div className="page">
-                    {/*SVG sourced from https://magecdn.com/tools/svg-loaders/cog05/*/}
-                    <div className="container">
-                    {image && (<img alt="loading spinner" src={loadingSpinner} width="500" height="500"/>)}
-                    </div>
-                    <p className= "subtitle">Loading...</p>
-                </div> )}
+                {page === "loading" && <LoadingPanel/>}
                 
                 {/*Section for model prediction output*/}
                 {page === "analysis"  && (

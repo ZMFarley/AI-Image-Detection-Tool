@@ -1,10 +1,10 @@
 import "./App.css";
-import UploadFile from "./ToolPages";
+import ImageDetectionTool from "./ImageDetectionTool";
 
 //Main entry portion of the tool
 function App(){
   return <div>
-    <UploadFile/>
+    <ImageDetectionTool/>
   </div>
 }
 

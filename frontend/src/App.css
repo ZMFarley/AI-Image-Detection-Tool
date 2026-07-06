@@ -46,6 +46,15 @@
   flex: 1;
   align-items: center;
   justify-content: center;
+  height: 100vh;
+}
+
+.results{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 
 .left,
@@ -73,6 +82,10 @@
   font-weight: bolder;
 }
 
+.transition-button:disabled{
+  cursor: not-allowed;
+}
+
 .delete-button{
   font-family: 'Courier New', Courier, monospace;
   margin: 1rem;
@@ -82,4 +95,10 @@
   font-weight: bolder;
   color: black;
   background-color: red;
+  border-color: black;
+}
+
+.delete-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }

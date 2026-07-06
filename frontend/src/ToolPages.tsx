@@ -70,24 +70,31 @@ export default function UploadFile() {
                         <section className="left">
                         {/*Prompt user to input image, and display it on the screen*/}
                         <input ref={imageRef} type="file" accept = "image/*" onChange={handleImageChange}/>
-            
+        
                         </section>
                         <div className="dividing-line"></div>   
                         <section className="right">
-                            {image && (<img alt="Preview image" src={image} width="500" height="auto"/>)}
+                            {image ? 
+                                (<img alt="Preview image" src={image} width="500" height="auto"/>)
+                                :
+                                (<h1 className= "subtitle">No Image Selected</h1>)
+                            }
                         </section>
                     </main>
                     <div className="button-container">
-                        <button className="delete-button" onClick={handleDeleteImage}>Delete Image</button>
+                        <button className="delete-button" onClick={handleDeleteImage} disabled={!file}>Delete Image</button>
                         <button className="transition-button" onClick={uploadImage} disabled={!file}>Click To Submit to the detector</button>
                     </div>
                 </div> )}
 
                 {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
                 {page === "loading" && (
-                <div className="container">
+                <div className="page">
                     {/*SVG sourced from https://magecdn.com/tools/svg-loaders/cog05/*/}
+                    <div className="container">
                     {image && (<img alt="loading spinner" src={loadingSpinner} width="500" height="500"/>)}
+                    </div>
+                    <p className= "subtitle">Loading...</p>
                 </div> )}
                 
                 {/*Section for model prediction output*/}
@@ -95,16 +102,22 @@ export default function UploadFile() {
                 <div className="page">
                     <h1 className="title">Results</h1>
                     {/*Output section for results*/}
-                    <div className="container">
+                    <div className="results">
                         {/*Conditionals to output model predictions*/}
-                        {response?.result === 0  && <h2>The model has predicted this image is NOT AI Generated</h2>}
-                        {response?.result === 1  && <h2>The model has predicted this image is AI Generated</h2>}
-                        {response?.result === 0  && <h3>with {(response?.probReal * 100).toFixed(2)}% certainty</h3>}
-                        {response?.result === 1  && <h3>with {(response?.probAI * 100).toFixed(2)}% certainty</h3>}
-
+                        {response?.result === 0  && 
+                            <>
+                                <h2>The model has predicted this image is NOT AI Generated</h2> 
+                                <h3>with {(response?.probReal * 100).toFixed(2)}% certainty</h3>
+                            </>}
+                        {response?.result === 1  && 
+                            <>
+                                <h2>The model has predicted this image is AI Generated</h2>
+                                <h3>with {(response?.probAI * 100).toFixed(2)}% certainty</h3>
+                            </>}
                     </div>  
-            
-                    <button className="transition-button" onClick={() =>  {handleDeleteImage(); setPage("submit");}}>Click to test another image!</button>
+                    <div className="button-container">      
+                        <button className="transition-button" onClick={() =>  {handleDeleteImage(); setPage("submit");}}>Click to test another image!</button>
+                    </div>
                 </div> )}
 
         </div>

@@ -1,8 +1,9 @@
 import { useState, type ChangeEvent, useRef } from 'react'
 import axios from 'axios';
 import LoadingPanel from './LoadingPanel';
+import AnalysisPanel from './AnalysisPanel';
 /* Type to hold prediction from model from API request */
-type Prediction = {
+export type Prediction = {
     result: number;
     probReal: number;
     probAI: number;
@@ -38,6 +39,13 @@ export default function ImageDetectionTool() {
         setImage(null);
 
     }
+
+    /* Reset page to remove old image */
+    function handleReset(){
+        handleDeleteImage();
+        setPage("submit");
+        setResponse(null);
+    }
     
     /* API POST request to send image and recieve prediction */
     async function uploadImage(){
@@ -46,11 +54,11 @@ export default function ImageDetectionTool() {
         if (file){
             const formData = new FormData();
             formData.append("file", file);
-            const response = await axios.post("http://localhost:8000/predict", formData,
+            const apiResponse = await axios.post("http://localhost:8000/predict", formData,
                 { headers: {"Content-Type": "multipart/form-data"}}
             )
             // Adjust api response for proper intake and display 
-            setResponse({result: response.data.result, probReal: response.data.probability_real, probAI: response.data.probability_ai});
+            setResponse({result: apiResponse.data.result, probReal: apiResponse.data.probability_real, probAI: apiResponse.data.probability_ai});
             //Update page after analyization and prevent image from remaining upon return to original screen
             setPage("analysis");
             setImage(null);
@@ -92,27 +100,7 @@ export default function ImageDetectionTool() {
                 {page === "loading" && <LoadingPanel/>}
                 
                 {/*Section for model prediction output*/}
-                {page === "analysis"  && (
-                <div className="page">
-                    <h1 className="title">Results</h1>
-                    {/*Output section for results*/}
-                    <div className="results">
-                        {/*Conditionals to output model predictions*/}
-                        {response?.result === 0  && 
-                            <>
-                                <h2>The model has predicted this image is NOT AI Generated</h2> 
-                                <h3>with {(response?.probReal * 100).toFixed(2)}% certainty</h3>
-                            </>}
-                        {response?.result === 1  && 
-                            <>
-                                <h2>The model has predicted this image is AI Generated</h2>
-                                <h3>with {(response?.probAI * 100).toFixed(2)}% certainty</h3>
-                            </>}
-                    </div>  
-                    <div className="button-container">      
-                        <button className="transition-button" onClick={() =>  {handleDeleteImage(); setPage("submit");}}>Click to test another image!</button>
-                    </div>
-                </div> )}
+                {page === "analysis"  && <AnalysisPanel response={response} onReset={handleReset}/>}
 
         </div>
     );

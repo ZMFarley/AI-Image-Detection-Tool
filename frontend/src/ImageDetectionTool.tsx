@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, useRef } from 'react'
 import axios from 'axios';
+import UploadPanel from './UploadPanel';
 import LoadingPanel from './LoadingPanel';
 import AnalysisPanel from './AnalysisPanel';
 /* Type to hold prediction from model from API request */
@@ -48,7 +49,7 @@ export default function ImageDetectionTool() {
     }
     
     /* API POST request to send image and recieve prediction */
-    async function uploadImage(){
+    async function handleUploadImage(){
         //Update page to prevent reinput of image
         setPage("loading")
         if (file){
@@ -68,33 +69,8 @@ export default function ImageDetectionTool() {
     return (
         <div>
             {/*Section for image input and submission to model*/}
-            {page === "submit" && (
-                <div className="page">
-                    <header>
-                        <h1 className="title">AI Image Detection Tool</h1>
-                        <h2 className="subtitle">This tool will intake whatever image desired, and determine if it is AI generated or not!</h2>
-                    </header>
-                    {/*Input section for image*/}
-                    <main className="container">
-                        <section className="left">
-                        {/*Prompt user to input image, and display it on the screen*/}
-                        <input ref={imageRef} type="file" accept = "image/*" onChange={handleImageChange}/>
-        
-                        </section>
-                        <div className="dividing-line"></div>   
-                        <section className="right">
-                            {image ? 
-                                (<img alt="Preview image" src={image} width="500" height="auto"/>)
-                                :
-                                (<h1 className= "subtitle">No Image Selected</h1>)
-                            }
-                        </section>
-                    </main>
-                    <div className="button-container">
-                        <button className="delete-button" onClick={handleDeleteImage} disabled={!file}>Delete Image</button>
-                        <button className="transition-button" onClick={uploadImage} disabled={!file}>Click To Submit to the detector</button>
-                    </div>
-                </div> )}
+            {page === "submit" && <UploadPanel file={file} image = {image} imageRef={imageRef} 
+                                   onImageChange={handleImageChange} onDeleteImage={handleDeleteImage} onUploadImage={handleUploadImage}/>}
 
                 {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
                 {page === "loading" && <LoadingPanel/>}

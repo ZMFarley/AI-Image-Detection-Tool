@@ -28,6 +28,7 @@ export default function UploadPanel ({file, image, onImageChange, onDeleteImage,
                                     isDragActive ?
                                     <p>Drop the files here...</p> :
                                     <>
+                                    {/* Image taken from https://www.svgrepo.com/svg/432027/upload-2 */}
                                     <img alt="upload_icon" src={upload_icon} width="100" height="100"/>
                                     <p>Drop files here, or click to browse</p>
                                     </>

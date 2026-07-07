@@ -109,7 +109,9 @@
   min-height: 200px;
   min-width: 500px;
   font-family: 'Courier New', Courier, monospace;
-  border: 3px dashed blue;
+  font-size: 1.25rem;
+  font-weight: bolder;
+  color: #0f2257;
   border-radius: 12px;
   background-color: lightblue;
   justify-content: center;

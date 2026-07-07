@@ -34,6 +34,15 @@ export default function UploadPanel ({file, image, onImageChange, onDeleteImage,
                                     </>
                                 } 
                             </div>
+                            <p className="upload-panel-text">OR</p>
+                            <section className="url-catcher-container">
+                                <p>Paste a link to an image below:</p>
+                                <input name="url-catcher" className ="url-catcher"/>
+                            </section>
+                            <div className="button-container">
+                                <button className="delete-button" onClick={onDeleteImage} disabled={!file}>Delete Image</button>
+                                <button className="transition-button" onClick={onUploadImage} disabled={!file}>Click To Submit to the detector</button>
+                            </div>
                         </section>
                         <div className="dividing-line"></div>   
                         <section className="right">
@@ -44,10 +53,6 @@ export default function UploadPanel ({file, image, onImageChange, onDeleteImage,
                             }
                         </section>
                     </main>
-                    <div className="button-container">
-                        <button className="delete-button" onClick={onDeleteImage} disabled={!file}>Delete Image</button>
-                        <button className="transition-button" onClick={onUploadImage} disabled={!file}>Click To Submit to the detector</button>
-                    </div>
                 </div> 
     );
 }

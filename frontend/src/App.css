@@ -118,3 +118,40 @@
   flex-direction: column;
   align-items: center;
 }
+
+.url-catcher-container {
+  flex: 1;
+  display: flex;
+  min-height: 200px;
+  min-width: 500px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.25rem;
+  font-weight: bolder;
+  color: #0f2257;
+  border-radius: 12px;
+  background-color: lightblue;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.url-catcher {
+  width: 400px;
+  height: 36px;
+  padding: 6px 12px;
+  border: 4px solid #0f2257;  
+  border-radius: 12px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.upload-panel-text{
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 1px 0;
+  color: #0f2257;
+  font-weight: bolder;
+}

@@ -41,10 +41,6 @@ export default function ImageDetectionTool() {
         if(image){
             URL.revokeObjectURL(image);
         }
-
-        if(imageRef.current){
-            imageRef.current.value = "";
-        }
         setFile(null);
         setImage(null);
 
@@ -78,7 +74,7 @@ export default function ImageDetectionTool() {
     return (
         <div>
             {/*Section for image input and submission to model*/}
-            {page === "submit" && <UploadPanel file={file} image = {image} imageRef={imageRef} 
+            {page === "submit" && <UploadPanel file={file} image = {image} 
                                    onImageChange={handleImageChange} onDeleteImage={handleDeleteImage} onUploadImage={handleUploadImage}/>}
             {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
             {page === "loading" && <LoadingPanel/>}

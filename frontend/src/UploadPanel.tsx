@@ -1,16 +1,17 @@
-import {type ChangeEvent} from 'react'
-
+import { useDropzone } from 'react-dropzone';
+import upload_icon from "./upload_icon.svg"
 type UploadPanelProps = {
     file: File | null;
     image: string | null;
-    imageRef: React.RefObject<HTMLInputElement | null>
-    onImageChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onImageChange: (file: File) => void;
     onDeleteImage: () => void;
-    onUploadImage: () => void;
+    onUploadImage: () => Promise<void>;
 };
 
-export default function UploadPanel ({file, image, imageRef, onImageChange, onDeleteImage, onUploadImage}: UploadPanelProps) {
+export default function UploadPanel ({file, image, onImageChange, onDeleteImage, onUploadImage}: UploadPanelProps) {
+
     /*Loading screen to prevent additional inputs while the client is waiting for response*/
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({ accept: {"image/*": []}, multiple: false, onDrop: (acceptedFiles) => onImageChange(acceptedFiles[0])})
     return (
                 <div className="page">
                     <header>
@@ -21,8 +22,17 @@ export default function UploadPanel ({file, image, imageRef, onImageChange, onDe
                     <main className="container">
                         <section className="left">
                         {/*Prompt user to input image, and display it on the screen*/}
-                        <input ref={imageRef} type="file" accept = "image/*" onChange={onImageChange}/>
-        
+                            <div{...getRootProps()} className="dropzone">
+                                <input {...getInputProps()}/>
+                                {
+                                    isDragActive ?
+                                    <p>Drop the files here...</p> :
+                                    <>
+                                    <img alt="upload_icon" src={upload_icon} width="100" height="100"/>
+                                    <p>Drop files here, or click to browse</p>
+                                    </>
+                                } 
+                            </div>
                         </section>
                         <div className="dividing-line"></div>   
                         <section className="right">

@@ -3,6 +3,7 @@ import axios from 'axios';
 import UploadPanel from './UploadPanel';
 import LoadingPanel from './LoadingPanel';
 import AnalysisPanel from './AnalysisPanel';
+
 /* Type to hold prediction from model from API request */
 export type Prediction = {
     result: number;
@@ -19,6 +20,14 @@ export default function ImageDetectionTool() {
     const imageRef = useRef<HTMLInputElement>(null);
 
     /* Image Handling Function Section */
+    function handleImageChange(file: File) {
+        //Accepts image from file explorer, stores its url for later use
+        if(file){
+            setFile(file);
+            setImage(URL.createObjectURL(file));
+        }
+    }
+    /* Temporarily Depreciated function, will be used to handle Singular URL attachments later
     function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
         //Accepts image from file explorer, stores its url for later use
         if(e.target.files){
@@ -26,7 +35,7 @@ export default function ImageDetectionTool() {
             setImage(URL.createObjectURL(e.target.files[0]));
         }
     }
-
+    */ 
     /* Delete Image */ 
     function handleDeleteImage() {
         if(image){
@@ -71,14 +80,11 @@ export default function ImageDetectionTool() {
             {/*Section for image input and submission to model*/}
             {page === "submit" && <UploadPanel file={file} image = {image} imageRef={imageRef} 
                                    onImageChange={handleImageChange} onDeleteImage={handleDeleteImage} onUploadImage={handleUploadImage}/>}
-
-                {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
-                {page === "loading" && <LoadingPanel/>}
-                
-                {/*Section for model prediction output*/}
-                {page === "analysis"  && <AnalysisPanel response={response} onReset={handleReset}/>}
-
-        </div>
+            {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
+            {page === "loading" && <LoadingPanel/>}
+            {/*Section for model prediction output*/}
+            {page === "analysis"  && <AnalysisPanel response={response} onReset={handleReset}/>}
+    </div>
     );
     
 }

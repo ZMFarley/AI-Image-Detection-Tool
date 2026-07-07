@@ -17,7 +17,6 @@ export default function ImageDetectionTool() {
     const [image, setImage] = useState<string | null>(null); /* State to hold image file */
     const [page, setPage] = useState<"submit" | "loading" | "analysis">("submit"); /* State to hold current active page for display*/
     const [response, setResponse] = useState<Prediction | null>(null); /* State to hold output of classifier from API request */
-    const imageRef = useRef<HTMLInputElement>(null);
 
     /* Image Handling Function Section */
     function handleImageChange(file: File) {
@@ -27,15 +26,14 @@ export default function ImageDetectionTool() {
             setImage(URL.createObjectURL(file));
         }
     }
-    /* Temporarily Depreciated function, will be used to handle Singular URL attachments later
-    function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
+    /* function to handle Singular URL attachments */
+    function handleImageURL(url: string) {
         //Accepts image from file explorer, stores its url for later use
-        if(e.target.files){
-            setFile(e.target.files[0]);
-            setImage(URL.createObjectURL(e.target.files[0]));
+        if(url){
+            setImage(url);
         }
     }
-    */ 
+    
     /* Delete Image */ 
     function handleDeleteImage() {
         if(image){
@@ -75,7 +73,7 @@ export default function ImageDetectionTool() {
         <div>
             {/*Section for image input and submission to model*/}
             {page === "submit" && <UploadPanel file={file} image = {image} 
-                                   onImageChange={handleImageChange} onDeleteImage={handleDeleteImage} onUploadImage={handleUploadImage}/>}
+                                   onImageChange={handleImageChange} onDeleteImage={handleDeleteImage} onUploadImage={handleUploadImage} onImageURL={handleImageURL}/>}
             {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
             {page === "loading" && <LoadingPanel/>}
             {/*Section for model prediction output*/}

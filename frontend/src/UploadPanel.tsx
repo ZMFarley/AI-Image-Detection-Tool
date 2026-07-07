@@ -1,4 +1,5 @@
 import { useDropzone } from 'react-dropzone';
+import { useState } from 'react'
 import upload_icon from "./upload_icon.svg"
 type UploadPanelProps = {
     file: File | null;
@@ -6,10 +7,12 @@ type UploadPanelProps = {
     onImageChange: (file: File) => void;
     onDeleteImage: () => void;
     onUploadImage: () => Promise<void>;
+    onImageURL: (url: string) => void;
 };
 
-export default function UploadPanel ({file, image, onImageChange, onDeleteImage, onUploadImage}: UploadPanelProps) {
-
+export default function UploadPanel ({file, image, onImageChange, onDeleteImage, onUploadImage, onImageURL}: UploadPanelProps) {
+    /* Use State Section */
+    const [url, setURL] = useState<string>(""); /* State to hold image file */
     /*Loading screen to prevent additional inputs while the client is waiting for response*/
     const {getRootProps, getInputProps, isDragActive} = useDropzone({ accept: {"image/*": []}, multiple: false, onDrop: (acceptedFiles) => onImageChange(acceptedFiles[0])})
     return (
@@ -37,7 +40,8 @@ export default function UploadPanel ({file, image, onImageChange, onDeleteImage,
                             <p className="upload-panel-text">OR</p>
                             <section className="url-catcher-container">
                                 <p>Paste a link to an image below:</p>
-                                <input name="url-catcher" className ="url-catcher"/>
+                                <input name="url-catcher" className ="url-catcher" type="text" value={url} onChange={(e) => setURL(e.target.value)} />
+                                <button className = "url-submitter" onClick={() => onImageURL(url)} disabled={!url}>Submit</button>
                             </section>
                             <div className="button-container">
                                 <button className="delete-button" onClick={onDeleteImage} disabled={!file}>Delete Image</button>

@@ -155,3 +155,15 @@
   color: #0f2257;
   font-weight: bolder;
 }
+
+.url-submitter{
+  font-family: 'Courier New', Courier, monospace;
+  margin: 1rem;
+  padding: 8px 14px;       
+  font-size: 1rem;
+  border-radius: 6px;
+  font-weight: bolder;
+  color: white;
+  background-color: navy;
+  border-color: black;
+}

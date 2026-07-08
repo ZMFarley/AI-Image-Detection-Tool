@@ -45,8 +45,8 @@ export default function UploadPanel ({file, image, imageURL, onImageChange, onDe
                                 <button className = "url-submitter" onClick={() => onImageURL(url)} disabled={!url}>Submit</button>
                             </section>
                             <div className="button-container">
-                                <button className="delete-button" onClick={onDeleteImage} disabled={!file}>Delete Image</button>
-                                <button className="transition-button" onClick={onUploadImage} disabled={!file}>Click To Submit to the detector</button>
+                                <button className="delete-button" onClick={onDeleteImage} disabled={!file && !imageURL}>Delete Image</button>
+                                <button className="transition-button" onClick={onUploadImage} disabled={!file && !imageURL}>Click To Submit to the detector</button>
                             </div>
                         </section>
                         <div className="dividing-line"></div>   

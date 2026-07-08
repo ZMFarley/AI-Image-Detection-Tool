@@ -72,7 +72,7 @@ export default function ImageDetectionTool() {
         
         // Temporary repeat code to prove workable url pasting, will change into combined payload later on.
         else if (imageURL){
-            const apiResponse = await axios.post("http://localhost:8000/predict", imageURL)
+            const apiResponse = await axios.post("http://localhost:8000/predictURL", imageURL);
             // Adjust api response for proper intake and display 
             setResponse({result: apiResponse.data.result, probReal: apiResponse.data.probability_real, probAI: apiResponse.data.probability_ai});
             //Update page after analyization and prevent image from remaining upon return to original screen

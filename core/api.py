@@ -1,10 +1,11 @@
 # IMPORT SECTION
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from embedding import predict_image
 from io import BytesIO
 from PIL import Image
+import requests
 app = FastAPI()
 
 #Pydantic Model to validate incoming result data
@@ -23,7 +24,37 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-# UPDATES NORMAL TRAFFIC SECTION OF THE DASHBOARD 
+
+# TEMPORARY END POINT TO CREATE FUNCTIONALITY FOR URL UPLOADINGS
+@app.post("/predictURL", response_model=Prediction)
+async def predict_image_url_class(url: str = Body(...)) -> Prediction:
+    response = requests.get(url)
+    image_bytes = response.content
+    try:
+        Image.open(BytesIO(image_bytes)).verify()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Image corrupted or invalid")
+    
+    try:
+        prediction = predict_image(image_bytes)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to Predict Image: " + str(e))
+    
+    #Validate Result fits 1 or 0 (real or fake)
+    if prediction["result"] != 0 or prediction["result"] != 1:
+        HTTPException(status_code=500, detail="Invalid prediction result") 
+        
+    #Validate Probabilities fall within proper range, 0-100%
+    if not 0 <= prediction["probability_real"] <= 1:
+        raise HTTPException(status_code=500, detail="Invalid prediction result") 
+    
+    if not 0 <= prediction["probability_ai"] <= 1:
+        raise HTTPException(status_code=500, detail="Invalid prediction result") 
+    
+    return prediction
+    
+
+# END POINT TO PREDICT IMAGE TYPE
 @app.post("/predict", response_model=Prediction)
 async def predict_image_class(file: UploadFile = File(...)) -> Prediction:
     #Validate image is uncorrupted and is a valid image

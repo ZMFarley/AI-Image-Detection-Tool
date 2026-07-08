@@ -4,13 +4,14 @@ import upload_icon from "./upload_icon.svg"
 type UploadPanelProps = {
     file: File | null;
     image: string | null;
+    imageURL: string | null;
     onImageChange: (file: File) => void;
     onDeleteImage: () => void;
     onUploadImage: () => Promise<void>;
     onImageURL: (url: string) => void;
 };
 
-export default function UploadPanel ({file, image, onImageChange, onDeleteImage, onUploadImage, onImageURL}: UploadPanelProps) {
+export default function UploadPanel ({file, image, imageURL, onImageChange, onDeleteImage, onUploadImage, onImageURL}: UploadPanelProps) {
     /* Use State Section */
     const [url, setURL] = useState<string>(""); /* State to hold image file */
     /*Loading screen to prevent additional inputs while the client is waiting for response*/
@@ -52,6 +53,9 @@ export default function UploadPanel ({file, image, onImageChange, onDeleteImage,
                         <section className="right">
                             {image ? 
                                 (<img alt="Preview image" src={image} width="500" height="auto"/>)
+                                :
+                                imageURL ?
+                                (<img alt="Preview image" src={imageURL} width="500" height="auto"/>)
                                 :
                                 (<h1 className= "subtitle">No Image Selected</h1>)
                             }

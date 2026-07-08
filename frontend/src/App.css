@@ -167,3 +167,8 @@
   background-color: navy;
   border-color: black;
 }
+
+.url-submitter:disabled{
+  cursor: not-allowed;
+  opacity: 0.6;
+}

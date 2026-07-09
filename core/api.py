@@ -56,7 +56,7 @@ async def predict_image_url_class(url: str = Body(...)) -> Prediction:
 
 # END POINT TO PREDICT IMAGE TYPE
 @app.post("/predict", response_model=Prediction)
-async def predict_image_class(file: UploadFile = File(...)) -> Prediction:
+async def predict_image_class(file: list[UploadFile] = File(...)) -> Prediction:
     #Validate image is uncorrupted and is a valid image
     try:
         Image.open(file.file).verify()

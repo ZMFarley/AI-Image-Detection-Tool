@@ -13,20 +13,21 @@ export type Prediction = {
 
 export default function ImageDetectionTool() {
     /* Use State Section */
-    const [file, setFile] = useState<File | null>(null); /* State to hold image file */
-    const [image, setImage] = useState<string | null>(null); /* State to hold image url for browswer rendering */
+    const [files, setFile] = useState<File[]>([]); /* State to hold image file */
+    const [images, setImage] = useState<string[]>([]); /* State to hold image url for browswer rendering for file based images*/
     const [page, setPage] = useState<"submit" | "loading" | "analysis">("submit"); /* State to hold current active page for display*/
     const [response, setResponse] = useState<Prediction | null>(null); /* State to hold output of classifier from API request */
     const [imageURL, setImageURL] = useState<string | null>(null); /* State to hold onlien gathered url for browswer rendering */
 
     /* Image Handling Function Section */
-    function handleImageChange(file: File) {
+    function handleImageChange(files: File[]) {
         //Accepts image from file explorer, stores its url for later use
-        if(file){
-            setFile(file);
-            setImage(URL.createObjectURL(file));
+        if(files){
+            setFile(prevFiles => [...prevFiles, ...files]);
+            setImage(prevImages => [...prevImages, ...files.map(file => URL.createObjectURL(file))]);
         }
     }
+
     /* function to handle Singular URL attachments */
     function handleImageURL(url: string) {
         //Accepts image from file explorer, stores its url for later use
@@ -35,15 +36,16 @@ export default function ImageDetectionTool() {
         }
     }
     
-    /* Delete Image */ 
+    /* Delete all Images */ 
     function handleDeleteImage() {
-        if(image){
-            URL.revokeObjectURL(image);
+        if(images){
+            images.map(image => URL.revokeObjectURL(image));
         }
-        setFile(null);
-        setImage(null);
+        setFile([]);
+        setImage([]);
         setImageURL(null);
     }
+    
 
     /* Reset page to remove old image */
     function handleReset(){
@@ -56,9 +58,11 @@ export default function ImageDetectionTool() {
     async function handleUploadImage(){
         //Update page to prevent reinput of image
         setPage("loading")
-        if (file){
+        if (files.length){
             const formData = new FormData();
-            formData.append("file", file);
+            for (const image of files){
+                formData.append("file", image);
+            }
             const apiResponse = await axios.post("http://localhost:8000/predict", formData,
                 { headers: {"Content-Type": "multipart/form-data"}}
             )
@@ -67,7 +71,7 @@ export default function ImageDetectionTool() {
             setResponse({result: apiResponse.data.result, probReal: apiResponse.data.probability_real, probAI: apiResponse.data.probability_ai});
             //Update page after analyization and prevent image from remaining upon return to original screen
             setPage("analysis");
-            setImage(null);
+            setImage([]);
         }
         
         // Temporary repeat code to prove workable url pasting, will change into combined payload later on.
@@ -77,14 +81,14 @@ export default function ImageDetectionTool() {
             setResponse({result: apiResponse.data.result, probReal: apiResponse.data.probability_real, probAI: apiResponse.data.probability_ai});
             //Update page after analyization and prevent image from remaining upon return to original screen
             setPage("analysis");
-            setImage(null);
+            setImage([]);
         }
     }   
 
     return (
         <div>
             {/*Section for image input and submission to model*/}
-            {page === "submit" && <UploadPanel file={file} image = {image} imageURL = {imageURL}
+            {page === "submit" && <UploadPanel files={files} images = {images} imageURL = {imageURL}
                                    onImageChange={handleImageChange} onDeleteImage={handleDeleteImage} onUploadImage={handleUploadImage} onImageURL={handleImageURL}/>}
             {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
             {page === "loading" && <LoadingPanel/>}

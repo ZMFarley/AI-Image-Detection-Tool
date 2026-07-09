@@ -2,20 +2,20 @@ import { useDropzone } from 'react-dropzone';
 import { useState } from 'react'
 import upload_icon from "./upload_icon.svg"
 type UploadPanelProps = {
-    file: File | null;
-    image: string | null;
+    files: File[];
+    images: string[];
     imageURL: string | null;
-    onImageChange: (file: File) => void;
+    onImageChange: (files: File[]) => void;
     onDeleteImage: () => void;
     onUploadImage: () => Promise<void>;
     onImageURL: (url: string) => void;
 };
 
-export default function UploadPanel ({file, image, imageURL, onImageChange, onDeleteImage, onUploadImage, onImageURL}: UploadPanelProps) {
+export default function UploadPanel ({files, images, imageURL, onImageChange, onDeleteImage, onUploadImage, onImageURL}: UploadPanelProps) {
     /* Use State Section */
     const [url, setURL] = useState<string>(""); /* State to hold image file */
     /*Loading screen to prevent additional inputs while the client is waiting for response*/
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({ accept: {"image/*": []}, multiple: false, onDrop: (acceptedFiles) => onImageChange(acceptedFiles[0])})
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({ accept: {"image/*": []}, multiple: true, onDrop: (acceptedFiles) => onImageChange(acceptedFiles)})
     return (
                 <div className="page">
                     <header>
@@ -42,18 +42,18 @@ export default function UploadPanel ({file, image, imageURL, onImageChange, onDe
                             <section className="url-catcher-container">
                                 <p>Paste a link to an image below:</p>
                                 <input name="url-catcher" className ="url-catcher" type="text" value={url} onChange={(e) => setURL(e.target.value)} />
-                                <button className = "url-submitter" onClick={() => onImageURL(url)} disabled={!url}>Submit</button>
+                                <button className = "url-submitter" onClick={() => {onImageURL(url); setURL("");}} disabled={!url}>Submit</button>
                             </section>
                             <div className="button-container">
-                                <button className="delete-button" onClick={onDeleteImage} disabled={!file && !imageURL}>Delete Image</button>
-                                <button className="transition-button" onClick={onUploadImage} disabled={!file && !imageURL}>Click To Submit to the detector</button>
+                                <button className="delete-button" onClick={onDeleteImage} disabled={!files && !imageURL}>Delete Image</button>
+                                <button className="transition-button" onClick={onUploadImage} disabled={!files && !imageURL}>Click To Submit to the detector</button>
                             </div>
                         </section>
                         <div className="dividing-line"></div>   
                         <section className="right">
                             <div className="preview-section">
-                                {image ? 
-                                    (<img className="preview-image" alt="Preview image" src={image} width="500" height="auto"/>)
+                                {images ? 
+                                    (<img className="preview-image" alt="Preview image" src={images[0]} width="500" height="auto"/>)
                                     :
                                     imageURL ?
                                     (<img className="preview-image" alt="Preview image" src={imageURL} width="500" height="auto"/>)

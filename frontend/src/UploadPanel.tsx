@@ -51,14 +51,16 @@ export default function UploadPanel ({file, image, imageURL, onImageChange, onDe
                         </section>
                         <div className="dividing-line"></div>   
                         <section className="right">
-                            {image ? 
-                                (<img alt="Preview image" src={image} width="500" height="auto"/>)
-                                :
-                                imageURL ?
-                                (<img alt="Preview image" src={imageURL} width="500" height="auto"/>)
-                                :
-                                (<h1 className= "subtitle">No Image Selected</h1>)
-                            }
+                            <div className="preview-section">
+                                {image ? 
+                                    (<img className="preview-image" alt="Preview image" src={image} width="500" height="auto"/>)
+                                    :
+                                    imageURL ?
+                                    (<img className="preview-image" alt="Preview image" src={imageURL} width="500" height="auto"/>)
+                                    :
+                                    (<h1 className= "subtitle">No Image Selected</h1>)
+                                }
+                            </div>
                         </section>
                     </main>
                 </div> 

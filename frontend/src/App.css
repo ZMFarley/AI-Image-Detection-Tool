@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  justify-content: center;
+  background-color: #EAF4FB;
 }
 
 .header {
@@ -19,6 +21,7 @@
   text-align: center;
   margin: 0 0 1px 0;
   top: 0;
+  color: #0f2257;
 }
 
 .subtitle{
@@ -27,6 +30,7 @@
   font-weight: 700;
   text-align: center;
   margin: 0 0 1px 0;
+  color: #0f2257;
 }
 
 .rules{
@@ -37,16 +41,20 @@
 }
 
 .dividing-line{
-  border-left: 5px solid black;
+  border-left: 5px solid #0f2257;
   height: 700px;
 }
 
 .container {
   display: flex;
+  background-color: whitesmoke;
+  border-radius:12px;
+  width: 90%;
   flex: 1;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  margin: 2rem auto;
+  box-shadow: 0 10px 30px grey;
 }
 
 .results{
@@ -117,8 +125,32 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 10px 15px grey;
+  margin-bottom: 15px;
 }
 
+.preview-section {
+  flex: 1;
+  display: flex;
+  min-height: 500px;
+  min-width: 700px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.25rem;
+  font-weight: bolder;
+  color: #0f2257;
+  border-radius: 12px;
+  background-color: lightblue;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 15px grey;
+}
+
+.preview-image{
+  object-fit: contain;
+  max-height: 400px;
+  max-width: (100%, 600px)
+}
 .url-catcher-container {
   flex: 1;
   display: flex;
@@ -133,6 +165,8 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 10px 15px grey;
+  margin-top: 15px;
 }
 
 .url-catcher {
@@ -148,10 +182,10 @@
 
 .upload-panel-text{
   font-family: 'Courier New', Courier, monospace;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
   text-align: center;
-  margin: 0 0 1px 0;
+  margin: 0 1px 1px 0;
   color: #0f2257;
   font-weight: bolder;
 }

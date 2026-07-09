@@ -156,5 +156,5 @@ def predict_image(input: list[bytes]) -> list[dict]:
         prob_real, prob_fake = clf.predict_proba(embedding)[0]
     
         #Create a JSON payload for the API to return, and return the predicted values, typecasting them to regular floats instead of numpy floats
-    results_payload.append({"result": int(predicted_class[0]), "probability_real": float(prob_real), "probability_ai": float(prob_fake)})
+        results_payload.append({"result": int(predicted_class[0]), "probability_real": float(prob_real), "probability_ai": float(prob_fake)})
     return results_payload

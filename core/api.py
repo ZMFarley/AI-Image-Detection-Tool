@@ -69,7 +69,6 @@ async def predict_image_class(files: list[UploadFile] = File(...)) -> list[Predi
     input = []
     for file in files:
         input.append(await file.read())
-
         #Validate image has arrived before continuing
         if not input:
             raise HTTPException(status_code=400, detail="No image recieved")
@@ -90,6 +89,5 @@ async def predict_image_class(files: list[UploadFile] = File(...)) -> list[Predi
         
         if not 0 <= prediction["probability_ai"] <= 1:
             raise HTTPException(status_code=500, detail="Invalid prediction result") 
-    
     return predictions
     

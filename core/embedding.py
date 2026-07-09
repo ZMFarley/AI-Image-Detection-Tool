@@ -124,18 +124,21 @@ def embed_locally_saved_datasets(embedder: Embedder, dataset_path: str, save_fil
     np.save(save_file_name, embedding_matrix)
     return embedding_matrix
 
+#Instatiate a local instance of embedder for image embedding
+embedder = Embedder()
 #Function to convert user's inputted image
-def convert_input_image(input: bytes) -> np.ndarray:
+def convert_input_image(input: list[bytes]) -> np.ndarray:
     #Instiate embedding object to load relevant models
-    embedder = Embedder()
     #Convert incoming image bytes to image and Open image
-    bytes_to_image = BytesIO(input)
-    image = [Image.open(bytes_to_image).convert("RGB")]
-    embedding = embedder._embed(image)
-    return embedding
+    embeddings = []
+    for image in input:
+        bytes_to_image = BytesIO(image)
+        image = [Image.open(bytes_to_image).convert("RGB")]
+        embeddings.append(embedder._embed(image))
+    return embeddings
 
 #Function for Full stack application to predict image 
-def predict_image(input: bytes) -> dict:
+def predict_image(input: list[bytes]) -> list[dict]:
     if not input:
         raise ValueError("Did not recieve image bytes")
     #Convert image to embeddings
@@ -147,9 +150,11 @@ def predict_image(input: bytes) -> dict:
     except Exception as e:
         raise RuntimeError(f"Unable to load classifier: {e}")
     
-    predicted_class = clf.predict(embeddings)
-    prob_real, prob_fake = clf.predict_proba(embeddings)[0]
+    results_payload = []
+    for embedding in embeddings:
+        predicted_class = clf.predict(embedding)
+        prob_real, prob_fake = clf.predict_proba(embedding)[0]
     
-    #Create a JSON payload for the API to return, and return the predicted values, typecasting them to regular floats instead of numpy floats
-    results_payload = {"result": int(predicted_class[0]), "probability_real": float(prob_real), "probability_ai": float(prob_fake)}
+        #Create a JSON payload for the API to return, and return the predicted values, typecasting them to regular floats instead of numpy floats
+    results_payload.append({"result": int(predicted_class[0]), "probability_real": float(prob_real), "probability_ai": float(prob_fake)})
     return results_payload

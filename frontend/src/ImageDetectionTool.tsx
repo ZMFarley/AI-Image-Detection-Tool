@@ -11,12 +11,18 @@ export type Prediction = {
     probAI: number;
 };
 
+/* Type for Api Response Conversion*/
+type ApiResponse = {
+     result: number;
+     probability_real: number;
+     probability_ai: number;
+}
 export default function ImageDetectionTool() {
     /* Use State Section */
     const [files, setFile] = useState<File[]>([]); /* State to hold image file */
     const [images, setImage] = useState<string[]>([]); /* State to hold image url for browswer rendering for file based images*/
     const [page, setPage] = useState<"submit" | "loading" | "analysis">("submit"); /* State to hold current active page for display*/
-    const [response, setResponse] = useState<Prediction | null>(null); /* State to hold output of classifier from API request */
+    const [responses, setResponses] = useState<Prediction[]>([]); /* State to hold output of classifier from API request */
     const [imageURL, setImageURL] = useState<string | null>(null); /* State to hold onlien gathered url for browswer rendering */
 
     /* Image Handling Function Section */
@@ -43,7 +49,7 @@ export default function ImageDetectionTool() {
         }
         setFile([]);
         setImage([]);
-        setImageURL(null);
+        setImageURL("");
     }
     
 
@@ -51,9 +57,11 @@ export default function ImageDetectionTool() {
     function handleReset(){
         handleDeleteImage();
         setPage("submit");
-        setResponse(null);
+        setResponses([]);
     }
     
+
+
     /* API POST request to send image and recieve prediction */
     async function handleUploadImage(){
         //Update page to prevent reinput of image
@@ -61,14 +69,14 @@ export default function ImageDetectionTool() {
         if (files.length){
             const formData = new FormData();
             for (const image of files){
-                formData.append("file", image);
+                formData.append("files", image);
             }
             const apiResponse = await axios.post("http://localhost:8000/predict", formData,
                 { headers: {"Content-Type": "multipart/form-data"}}
             )
 
             // Adjust api response for proper intake and display 
-            setResponse({result: apiResponse.data.result, probReal: apiResponse.data.probability_real, probAI: apiResponse.data.probability_ai});
+            setResponses([{result: apiResponse.data.result, probReal: apiResponse.data.probability_real, probAI: apiResponse.data.probability_ai}]);
             //Update page after analyization and prevent image from remaining upon return to original screen
             setPage("analysis");
             setImage([]);
@@ -78,7 +86,11 @@ export default function ImageDetectionTool() {
         else if (imageURL){
             const apiResponse = await axios.post("http://localhost:8000/predictURL", imageURL);
             // Adjust api response for proper intake and display 
-            setResponse({result: apiResponse.data.result, probReal: apiResponse.data.probability_real, probAI: apiResponse.data.probability_ai});
+            const mappedResponses = apiResponse.data.map((response: ApiResponse) => ({
+                result: response.result,
+                probReal: response.probability_real,
+                probAI: response.probability_ai}));
+            setResponses(mappedResponses);
             //Update page after analyization and prevent image from remaining upon return to original screen
             setPage("analysis");
             setImage([]);
@@ -93,7 +105,7 @@ export default function ImageDetectionTool() {
             {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
             {page === "loading" && <LoadingPanel/>}
             {/*Section for model prediction output*/}
-            {page === "analysis"  && <AnalysisPanel response={response} onReset={handleReset}/>}
+            {page === "analysis"  && <AnalysisPanel responses={responses} onReset={handleReset}/>}
     </div>
     );
     

@@ -1,7 +1,7 @@
 import type { Prediction } from "./ImageDetectionTool";
 
 type AnalysisPanelProps = {
-    response: Prediction | null;
+    response: Prediction[];
     onReset: () => void;
 };
 

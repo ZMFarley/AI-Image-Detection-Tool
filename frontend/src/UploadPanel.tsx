@@ -14,6 +14,7 @@ type UploadPanelProps = {
 export default function UploadPanel ({files, images, imageURL, onImageChange, onDeleteImage, onUploadImage, onImageURL}: UploadPanelProps) {
     /* Use State Section */
     const [url, setURL] = useState<string>(""); /* State to hold image file */
+    const [previewedImage, setPreviewedImage] = useState<number>(0); /* State to set what image is currently being previewed*/
     /*Loading screen to prevent additional inputs while the client is waiting for response*/
     const {getRootProps, getInputProps, isDragActive} = useDropzone({ accept: {"image/*": []}, multiple: true, onDrop: (acceptedFiles) => onImageChange(acceptedFiles)})
     return (
@@ -45,7 +46,6 @@ export default function UploadPanel ({files, images, imageURL, onImageChange, on
                                 <button className = "url-submitter" onClick={() => {onImageURL(url); setURL("");}} disabled={!url}>Submit</button>
                             </section>
                             <div className="button-container">
-                                <button className="delete-button" onClick={onDeleteImage} disabled={files.length == 0 && !imageURL}>Delete Image</button>
                                 <button className="transition-button" onClick={onUploadImage} disabled={files.length == 0 && !imageURL}>Click To Submit to the detector</button>
                             </div>
                         </section>
@@ -53,7 +53,7 @@ export default function UploadPanel ({files, images, imageURL, onImageChange, on
                         <section className="right">
                             <div className="preview-section">
                                 {images.length ? 
-                                    (<img className="preview-image" alt="Preview image" src={images[0]} width="500" height="auto"/>)
+                                    (<img className="preview-image" alt="Preview image" src={images[previewedImage]} width="500" height="auto"/>)
                                     :
                                     imageURL ?
                                     (<img className="preview-image" alt="Preview image" src={imageURL} width="500" height="auto"/>)
@@ -61,6 +61,20 @@ export default function UploadPanel ({files, images, imageURL, onImageChange, on
                                     (<h1 className= "subtitle">No Image Selected</h1>)
                                 }
                             </div>
+                            {images.length > 0 && (
+                            <div className="thumbnail-section">
+                                {images.map((image, index) => (
+                                    <button key={image} className="thumbnail-button" type="button" onClick={() => setPreviewedImage(index)}>
+                                        <img className="thumbnail-image" alt={`Image ${index + 1}`} src = {image}/>
+                                    </button>
+                                ))}
+                            </div>
+                            )}
+                            {(files.length > 0 || imageURL) && (
+                                <div className="button-container">
+                                    <button className="delete-button" onClick={onDeleteImage} disabled={files.length == 0 && !imageURL}>Delete All</button>
+                                </div>
+                            )}
                         </section>
                     </main>
                 </div> 

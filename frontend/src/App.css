@@ -102,7 +102,7 @@
   border-radius: 6px;
   font-weight: bolder;
   color: black;
-  background-color: red;
+  background-color: lightcoral;
   border-color: black;
 }
 
@@ -126,7 +126,6 @@
   flex-direction: column;
   align-items: center;
   box-shadow: 0 10px 15px grey;
-  margin-bottom: 15px;
 }
 
 .preview-section {
@@ -149,7 +148,7 @@
 .preview-image{
   object-fit: contain;
   max-height: 400px;
-  max-width: (100%, 600px)
+  max-width: min(100%, 600px)
 }
 .url-catcher-container {
   flex: 1;
@@ -166,7 +165,6 @@
   flex-direction: column;
   align-items: center;
   box-shadow: 0 10px 15px grey;
-  margin-top: 15px;
 }
 
 .url-catcher {
@@ -186,6 +184,8 @@
   font-weight: 700;
   text-align: center;
   margin: 0 1px 1px 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
   color: #0f2257;
   font-weight: bolder;
 }
@@ -205,4 +205,40 @@
 .url-submitter:disabled{
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+.thumbnail-section{
+  display: flex;
+  flex: 0 0 auto;
+  max-height: 300px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 10px;
+  width: min(100%, 600px);
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 12px;
+  background-color: lightblue;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.thumbnail-image{
+  width: 100px;
+  height: 100px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.thumbnail-button{
+  flex: 0 0 auto;
+  padding: 0;
+  width: 100px;
+  height: 100px;
+  aspect-ratio: 1;
+  background: none;
+  cursor: pointer;
+  border: 2px solid transparent;
+  
 }

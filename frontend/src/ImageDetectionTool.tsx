@@ -39,6 +39,7 @@ export default function ImageDetectionTool() {
         //Accepts image from file explorer, stores its url for later use
         if(url){
             setImageURL(url);
+            setImage(prevImages => [...prevImages, url]);
         }
     }
     

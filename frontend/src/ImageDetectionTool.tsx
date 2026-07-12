@@ -20,7 +20,7 @@ type ApiResponse = {
 export default function ImageDetectionTool() {
     /* Use State Section */
     const [files, setFile] = useState<File[]>([]); /* State to hold image file */
-    const [images, setImage] = useState<string[]>([]); /* State to hold image url for browswer rendering for file based images*/
+    const [images, setImages] = useState<string[]>([]); /* State to hold image url for browswer rendering for file based images*/
     const [page, setPage] = useState<"submit" | "loading" | "analysis">("submit"); /* State to hold current active page for display*/
     const [responses, setResponses] = useState<Prediction[]>([]); /* State to hold output of classifier from API request */
     const [imageURL, setImageURL] = useState<string | null>(null); /* State to hold onlien gathered url for browswer rendering */
@@ -30,7 +30,7 @@ export default function ImageDetectionTool() {
         //Accepts image from file explorer, stores its url for later use
         if(files){
             setFile(prevFiles => [...prevFiles, ...files]);
-            setImage(prevImages => [...prevImages, ...files.map(file => URL.createObjectURL(file))]);
+            setImages(prevImages => [...prevImages, ...files.map(file => URL.createObjectURL(file))]);
         }
     }
 
@@ -39,7 +39,7 @@ export default function ImageDetectionTool() {
         //Accepts image from file explorer, stores its url for later use
         if(url){
             setImageURL(url);
-            setImage(prevImages => [...prevImages, url]);
+            setImages(prevImages => [...prevImages, url]);
         }
     }
     
@@ -49,7 +49,7 @@ export default function ImageDetectionTool() {
             images.map(image => URL.revokeObjectURL(image));
         }
         setFile([]);
-        setImage([]);
+        setImages([]);
         setImageURL("");
     }
     
@@ -59,6 +59,7 @@ export default function ImageDetectionTool() {
         handleDeleteImage();
         setPage("submit");
         setResponses([]);
+        setImages([]);
     }
     
 
@@ -77,10 +78,13 @@ export default function ImageDetectionTool() {
             )
 
             // Adjust api response for proper intake and display 
-            setResponses([{result: apiResponse.data.result, probReal: apiResponse.data.probability_real, probAI: apiResponse.data.probability_ai}]);
+             const mappedResponses = apiResponse.data.map((response: ApiResponse) => ({
+                result: response.result,
+                probReal: response.probability_real,
+                probAI: response.probability_ai}));
+            setResponses(mappedResponses);
             //Update page after analyization and prevent image from remaining upon return to original screen
             setPage("analysis");
-            setImage([]);
         }
         
         // Temporary repeat code to prove workable url pasting, will change into combined payload later on.
@@ -94,7 +98,6 @@ export default function ImageDetectionTool() {
             setResponses(mappedResponses);
             //Update page after analyization and prevent image from remaining upon return to original screen
             setPage("analysis");
-            setImage([]);
         }
     }   
 
@@ -106,7 +109,7 @@ export default function ImageDetectionTool() {
             {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
             {page === "loading" && <LoadingPanel/>}
             {/*Section for model prediction output*/}
-            {page === "analysis"  && <AnalysisPanel responses={responses} onReset={handleReset}/>}
+            {page === "analysis"  && <AnalysisPanel  images={images} responses={responses} onReset={handleReset}/>}
     </div>
     );
     

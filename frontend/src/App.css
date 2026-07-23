@@ -244,9 +244,11 @@
 .result-ai {
   background-color: red;
   color: black;
+  border-radius: 12px;
 }
 
 .result-real {
   background-color: green;
   color:white;
+  border-radius: 12px;
 }

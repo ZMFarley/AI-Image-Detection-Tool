@@ -1,17 +1,15 @@
 import { useDropzone } from 'react-dropzone';
+import type { ImageInput } from "./ImageDetectionTool";
 import { useState } from 'react'
 import upload_icon from "./upload_icon.svg"
 type UploadPanelProps = {
-    files: File[];
-    images: string[];
-    imageURL: string | null;
-    onImageChange: (files: File[]) => void;
+    imageQueue: ImageInput[];
+    onImageChange: (images: File[] | string) => void;
     onDeleteImage: () => void;
-    onUploadImage: () => Promise<void>;
-    onImageURL: (url: string) => void;
+    onImagePrediction: () => Promise<void>;
 };
 
-export default function UploadPanel ({files, images, imageURL, onImageChange, onDeleteImage, onUploadImage, onImageURL}: UploadPanelProps) {
+export default function UploadPanel ({imageQueue, onImageChange, onDeleteImage, onImagePrediction}: UploadPanelProps) {
     /* Use State Section */
     const [url, setURL] = useState<string>(""); /* State to hold image file */
     const [previewedImage, setPreviewedImage] = useState<number>(0); /* State to set what image is currently being previewed*/
@@ -43,36 +41,33 @@ export default function UploadPanel ({files, images, imageURL, onImageChange, on
                             <section className="url-catcher-container">
                                 <p>Paste a link to an image below:</p>
                                 <input name="url-catcher" className ="url-catcher" type="text" value={url} onChange={(e) => setURL(e.target.value)} />
-                                <button className = "url-submitter" onClick={() => {onImageURL(url); setURL("");}} disabled={!url}>Submit</button>
+                                <button className = "url-submitter" onClick={() => {onImageChange(url); setURL("");}} disabled={!url}>Submit</button>
                             </section>
                             <div className="button-container">
-                                <button className="transition-button" onClick={onUploadImage} disabled={files.length == 0 && !imageURL}>Click To Submit to the detector</button>
+                                <button className="transition-button" onClick={onImagePrediction} disabled={imageQueue.length == 0}>Click To Submit to the detector</button>
                             </div>
                         </section>
                         <div className="dividing-line"></div>   
                         <section className="right">
                             <div className="preview-section">
-                                {images.length ? 
-                                    (<img className="preview-image" alt="Preview image" src={images[previewedImage]} width="500" height="auto"/>)
-                                    :
-                                    imageURL ?
-                                    (<img className="preview-image" alt="Preview image" src={imageURL} width="500" height="auto"/>)
+                                {imageQueue.length ? 
+                                    (<img className="preview-image" alt="Preview image" src={imageQueue[previewedImage].preview} width="500" height="auto"/>)
                                     :
                                     (<h1 className= "subtitle">No Image Selected</h1>)
                                 }
                             </div>
-                            {images.length > 0 && (
+                            {imageQueue.length > 0 && (
                             <div className="thumbnail-section">
-                                {images.map((image, index) => (
-                                    <button key={image} className="thumbnail-button" type="button" onClick={() => setPreviewedImage(index)}>
-                                        <img className="thumbnail-image" alt={`Image ${index + 1}`} src = {image}/>
+                                {imageQueue.map((image, index) => (
+                                    <button key={image.preview} className="thumbnail-button" type="button" onClick={() => setPreviewedImage(index)}>
+                                        <img className="thumbnail-image" alt={`Image ${index + 1}`} src = {image.preview}/>
                                     </button>
                                 ))}
                             </div>
                             )}
-                            {(files.length > 0 || imageURL) && (
+                            {(imageQueue.length > 0) && (
                                 <div className="button-container">
-                                    <button className="delete-button" onClick={onDeleteImage} disabled={files.length == 0 && !imageURL}>Delete All</button>
+                                    <button className="delete-button" onClick={onDeleteImage} disabled={imageQueue.length == 0}>Delete All</button>
                                 </div>
                             )}
                         </section>

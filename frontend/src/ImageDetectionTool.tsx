@@ -64,13 +64,19 @@ export default function ImageDetectionTool() {
     
     /* Delete all Images */ 
     function handleDeleteAllImages() {
-        return
+        // Remove previews from internal memory for generated file previews and then delete queue 
+        imageQueue.forEach(image => {
+                if (image.kind === "file"){
+                    URL.revokeObjectURL(image.preview);
+                }
+            });
+        setImageQueue([]);
     }
     
 
     /* Reset page to remove old image */
     function handleReset(){
-        handleDeleteAllImage();
+        handleDeleteAllImages();
         setPage("submit");
         setResponses([]);
     }
@@ -78,17 +84,21 @@ export default function ImageDetectionTool() {
 
 
     /* API POST request to send image and recieve prediction */
-    async function handleUploadImage(){
+    async function handleImagePrediction(){
         //Update page to prevent reinput of image
         setPage("loading")
-        if (files.length){
+        if (imageQueue.length){
             const formData = new FormData();
-            for (const image of files){
-                formData.append("files", image);
+            for (const image of imageQueue){
+                if (image.kind === "file"){
+                    formData.append("images", image.file);
+                }
+
+                else {
+                    formData.append("images", image.url);
+                }
             }
-            const apiResponse = await axios.post("http://localhost:8000/predict", formData,
-                { headers: {"Content-Type": "multipart/form-data"}}
-            )
+            const apiResponse = await axios.post("http://localhost:8000/predict", formData)
 
             // Adjust api response for proper intake and display 
              const mappedResponses = apiResponse.data.map((response: ApiResponse) => ({
@@ -100,29 +110,17 @@ export default function ImageDetectionTool() {
             setPage("analysis");
         }
         
-        // Temporary repeat code to prove workable url pasting, will change into combined payload later on.
-        else if (imageURL){
-            const apiResponse = await axios.post("http://localhost:8000/predictURL", imageURL);
-            // Adjust api response for proper intake and display 
-            const mappedResponses = apiResponse.data.map((response: ApiResponse) => ({
-                result: response.result,
-                probReal: response.probability_real,
-                probAI: response.probability_ai}));
-            setResponses(mappedResponses);
-            //Update page after analyization and prevent image from remaining upon return to original screen
-            setPage("analysis");
-        }
     }   
 
     return (
         <div>
             {/*Section for image input and submission to model*/}
-            {page === "submit" && <UploadPanel files={files} images = {images} imageURL = {imageURL}
-                                   onImageChange={handleImageUpload} onDeleteImage={handleDeleteImage} onUploadImage={handleUploadImage} onImageURL={handleImageURL}/>}
+            {page === "submit" && <UploadPanel imageQueue={imageQueue}
+                                   onImageChange={handleImageUpload} onDeleteImage={handleDeleteAllImages} onImagePrediction={handleImagePrediction}/>}
             {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
             {page === "loading" && <LoadingPanel/>}
             {/*Section for model prediction output*/}
-            {page === "analysis"  && <AnalysisPanel  images={images} responses={responses} onReset={handleReset}/>}
+            {page === "analysis"  && <AnalysisPanel  imageQueue={imageQueue} responses={responses} onReset={handleReset}/>}
     </div>
     );
     

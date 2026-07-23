@@ -1,12 +1,13 @@
 import type { Prediction } from "./ImageDetectionTool";
+import type { ImageInput } from "./ImageDetectionTool";
 import { useState } from 'react';
 type AnalysisPanelProps = {
-    images: string[];
+    imageQueue: ImageInput[];
     responses: Prediction[];
     onReset: () => void;
 };
 
-export default function AnalysisPanel ({images, responses, onReset }: AnalysisPanelProps) {
+export default function AnalysisPanel ({imageQueue, responses, onReset }: AnalysisPanelProps) {
     /*Loading screen to prevent additional inputs while the client is waiting for responses*/
     const [previewedImage, setPreviewedImage] = useState<number>(0); /* State to set what image is currently being previewed*/
     const displayedResponse = responses[previewedImage]; /* Displays results for currently displayed image */
@@ -42,13 +43,13 @@ export default function AnalysisPanel ({images, responses, onReset }: AnalysisPa
                         <div className="dividing-line"></div>   
                         <section className="right">
                             <div className="preview-section">
-                                <img className="preview-image" alt="Preview image" src={images[previewedImage]} width="500" height="auto"/>
+                                <img className="preview-image" alt="Preview image" src={imageQueue[previewedImage].preview} width="500" height="auto"/>
                             </div>
-                            {images.length > 0 && (
+                            {imageQueue.length > 0 && (
                             <div className="thumbnail-section">
-                                {images.map((image, index) => (
-                                    <button key={image} className="thumbnail-button" type="button" onClick={() => setPreviewedImage(index)}>
-                                        <img className="thumbnail-image" alt={`Image ${index + 1}`} src = {image}/>
+                                {imageQueue.map((image, index) => (
+                                    <button key={image.preview} className="thumbnail-button" type="button" onClick={() => setPreviewedImage(index)}>
+                                        <img className="thumbnail-image" alt={`Image ${index + 1}`} src = {image.preview}/>
                                     </button>
                                 ))}
                             </div>

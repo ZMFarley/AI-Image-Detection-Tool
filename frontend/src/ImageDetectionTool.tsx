@@ -17,49 +17,62 @@ type ApiResponse = {
      probability_real: number;
      probability_ai: number;
 }
+
+export type ImageInput = 
+    |{
+        kind: "file";
+        file: File;
+        preview: string;
+    }
+    |{
+        kind: "url";
+        url: string;
+        preview: string;
+    };
 export default function ImageDetectionTool() {
     /* Use State Section */
-    const [files, setFile] = useState<File[]>([]); /* State to hold image file */
-    const [images, setImages] = useState<string[]>([]); /* State to hold image url for browswer rendering for file based images*/
+    const [imageQueue, setImageQueue] = useState<ImageInput[]>([]);
     const [page, setPage] = useState<"submit" | "loading" | "analysis">("submit"); /* State to hold current active page for display*/
     const [responses, setResponses] = useState<Prediction[]>([]); /* State to hold output of classifier from API request */
-    const [imageURL, setImageURL] = useState<string | null>(null); /* State to hold onlien gathered url for browswer rendering */
 
     /* Image Handling Function Section */
-    function handleImageChange(files: File[]) {
-        //Accepts image from file explorer, stores its url for later use
-        if(files){
-            setFile(prevFiles => [...prevFiles, ...files]);
-            setImages(prevImages => [...prevImages, ...files.map(file => URL.createObjectURL(file))]);
-        }
-    }
+    function handleImageUpload(input: File[] | string) {
+        let images: ImageInput[];
+        if(input){
+            //If input is an Url, assign proper state 
+            if (typeof input === "string"){
+                images =  [{
+                    kind:  "url",
+                    url: input,
+                    preview: input
+                }];
+            }
+            //Else if input is a file, assign proper state and generate relevant preview
+            else{
+                images = input.map(element => ({
+                    kind: "file",
+                    file: element,
+                    preview: URL.createObjectURL(element)
+                }));
+            }
 
-    /* function to handle Singular URL attachments */
-    function handleImageURL(url: string) {
-        //Accepts image from file explorer, stores its url for later use
-        if(url){
-            setImageURL(url);
-            setImages(prevImages => [...prevImages, url]);
+            // Modify the state to update the Image Queue.
+            setImageQueue(prevImages => [...prevImages, ...images]);
         }
+        
     }
     
     /* Delete all Images */ 
-    function handleDeleteImage() {
-        if(images){
-            images.map(image => URL.revokeObjectURL(image));
-        }
-        setFile([]);
-        setImages([]);
-        setImageURL("");
+    function handleDeleteAllImages() {
+        return
     }
     
 
     /* Reset page to remove old image */
     function handleReset(){
-        handleDeleteImage();
+        handleDeleteAllImage();
         setPage("submit");
         setResponses([]);
-        setImages([]);
     }
     
 
@@ -105,7 +118,7 @@ export default function ImageDetectionTool() {
         <div>
             {/*Section for image input and submission to model*/}
             {page === "submit" && <UploadPanel files={files} images = {images} imageURL = {imageURL}
-                                   onImageChange={handleImageChange} onDeleteImage={handleDeleteImage} onUploadImage={handleUploadImage} onImageURL={handleImageURL}/>}
+                                   onImageChange={handleImageUpload} onDeleteImage={handleDeleteImage} onUploadImage={handleUploadImage} onImageURL={handleImageURL}/>}
             {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
             {page === "loading" && <LoadingPanel/>}
             {/*Section for model prediction output*/}

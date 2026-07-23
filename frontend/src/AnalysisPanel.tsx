@@ -24,11 +24,13 @@ export default function AnalysisPanel ({images, responses, onReset }: AnalysisPa
                             {/*Conditionals to output model predictions*/}
                             {displayedResponse?.result === 0  && 
                                 <>
+                                    <h1 className="result-real">Real Image Detected</h1>
                                     <h2>The model has predicted this image is NOT AI Generated</h2> 
                                     <h3>with {(displayedResponse?.probReal * 100).toFixed(2)}% certainty</h3>
                                 </>}
                             {displayedResponse?.result === 1  && 
                                 <>
+                                    <h1 className="result-ai">AI-Generated Image Detected</h1>
                                     <h2>The model has predicted this image is AI Generated</h2>
                                     <h3>with {(displayedResponse?.probAI * 100).toFixed(2)}% certainty</h3>
                             </>}

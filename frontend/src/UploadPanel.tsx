@@ -2,11 +2,13 @@ import { useDropzone } from 'react-dropzone';
 import type { ImageInput } from "./ImageDetectionTool";
 import { useState } from 'react'
 import upload_icon from "./upload_icon.svg"
+import PreviewPanel from './PreviewPanel';
 
 // Type section
 // Type to handle moving previewed image via arrows 
 type Direction = "next" | "previous";
 
+// Relevant props to operate Panel
 type UploadPanelProps = {
     imageQueue: ImageInput[];
     onImageChange: (images: File[] | string) => void;
@@ -69,26 +71,7 @@ export default function UploadPanel ({imageQueue, onImageChange, onDeleteImage, 
                         </section>
                         <div className="dividing-line"></div>   
                         <section className="right">
-                            <div className='preview-row'>
-                                {imageQueue.length > 0 && (<button className='preview-button' onClick={() => handleMovePreview(previewedImage,imageQueue.length, "previous")}>{"<"}</button>)}
-                                <div className="preview-section">
-                                    {imageQueue.length ? 
-                                        (<img className="preview-image" alt="Preview image" src={imageQueue[previewedImage].preview} width="500" height="auto"/>)
-                                        :
-                                        (<h1 className= "subtitle">No Image Selected</h1>)
-                                    }
-                                </div>
-                                {imageQueue.length > 0 && (<button className='preview-button' onClick={() => handleMovePreview(previewedImage,imageQueue.length, "next")}>{">"}</button>)}
-                            </div>
-                            {imageQueue.length > 0 && (
-                            <div className="thumbnail-section">
-                                {imageQueue.map((image, index) => (
-                                    <button key={image.preview} className="thumbnail-button" type="button" onClick={() => setPreviewedImage(index)}>
-                                        <img className="thumbnail-image" alt={`Image ${index + 1}`} src = {image.preview}/>
-                                    </button>
-                                ))}
-                            </div>
-                            )}
+                            <PreviewPanel imageQueue={imageQueue} previewedImage={previewedImage} onPreviewedImageChange={setPreviewedImage}/>
                             {(imageQueue.length > 0) && (
                                 <div className="button-container">
                                     <button className="delete-button" onClick={onDeleteImage} disabled={imageQueue.length == 0}>Delete All</button>

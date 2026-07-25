@@ -1,5 +1,6 @@
 import type { Prediction } from "./ImageDetectionTool";
 import type { ImageInput } from "./ImageDetectionTool";
+import PreviewPanel from './PreviewPanel';
 import { useState } from 'react';
 type AnalysisPanelProps = {
     imageQueue: ImageInput[];
@@ -42,18 +43,7 @@ export default function AnalysisPanel ({imageQueue, responses, onReset }: Analys
                         </section>
                         <div className="dividing-line"></div>   
                         <section className="right">
-                            <div className="preview-section">
-                                <img className="preview-image" alt="Preview image" src={imageQueue[previewedImage].preview} width="500" height="auto"/>
-                            </div>
-                            {imageQueue.length > 0 && (
-                            <div className="thumbnail-section">
-                                {imageQueue.map((image, index) => (
-                                    <button key={image.preview} className="thumbnail-button" type="button" onClick={() => setPreviewedImage(index)}>
-                                        <img className="thumbnail-image" alt={`Image ${index + 1}`} src = {image.preview}/>
-                                    </button>
-                                ))}
-                            </div>
-                            )}
+                            <PreviewPanel imageQueue={imageQueue} previewedImage={previewedImage} onPreviewedImageChange={setPreviewedImage}/>
                         </section>
                     </main>
                 </div> 

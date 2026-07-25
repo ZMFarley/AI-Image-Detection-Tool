@@ -2,6 +2,11 @@ import { useDropzone } from 'react-dropzone';
 import type { ImageInput } from "./ImageDetectionTool";
 import { useState } from 'react'
 import upload_icon from "./upload_icon.svg"
+
+// Type section
+// Type to handle moving previewed image via arrows 
+type Direction = "next" | "previous";
+
 type UploadPanelProps = {
     imageQueue: ImageInput[];
     onImageChange: (images: File[] | string) => void;
@@ -15,6 +20,21 @@ export default function UploadPanel ({imageQueue, onImageChange, onDeleteImage, 
     const [previewedImage, setPreviewedImage] = useState<number>(0); /* State to set what image is currently being previewed*/
     /*Loading screen to prevent additional inputs while the client is waiting for response*/
     const {getRootProps, getInputProps, isDragActive} = useDropzone({ accept: {"image/*": []}, multiple: true, onDrop: (acceptedFiles) => onImageChange(acceptedFiles)})
+
+    function handleMovePreview(previewedImage: number, queueLength: number, direction: Direction){
+       //Handle empty queues 
+       if (!queueLength){
+          return;   
+       }
+
+       //Determine increment or decrement to Previewed Image
+       const change = (direction === "next") ? 1 : -1
+
+       //Update previewed image, accounting for each edge case via wrap around
+       setPreviewedImage(previewedImage => ((previewedImage + change + queueLength)) % queueLength); 
+
+
+    }
     return (
                 <div className="page">
                     <header>
@@ -49,12 +69,16 @@ export default function UploadPanel ({imageQueue, onImageChange, onDeleteImage, 
                         </section>
                         <div className="dividing-line"></div>   
                         <section className="right">
-                            <div className="preview-section">
-                                {imageQueue.length ? 
-                                    (<img className="preview-image" alt="Preview image" src={imageQueue[previewedImage].preview} width="500" height="auto"/>)
-                                    :
-                                    (<h1 className= "subtitle">No Image Selected</h1>)
-                                }
+                            <div className='preview-row'>
+                                {imageQueue.length > 0 && (<button className='preview-button' onClick={() => handleMovePreview(previewedImage,imageQueue.length, "previous")}>{"<"}</button>)}
+                                <div className="preview-section">
+                                    {imageQueue.length ? 
+                                        (<img className="preview-image" alt="Preview image" src={imageQueue[previewedImage].preview} width="500" height="auto"/>)
+                                        :
+                                        (<h1 className= "subtitle">No Image Selected</h1>)
+                                    }
+                                </div>
+                                {imageQueue.length > 0 && (<button className='preview-button' onClick={() => handleMovePreview(previewedImage,imageQueue.length, "next")}>{">"}</button>)}
                             </div>
                             {imageQueue.length > 0 && (
                             <div className="thumbnail-section">

@@ -253,3 +253,18 @@
   color:white;
   border-radius: 12px;
 }
+
+.preview-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-button {
+  color:#0f2257;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 5rem;
+  border: 2px solid transparent;
+  background: transparent;
+  font-weight: bolder;
+}

@@ -20,6 +20,8 @@ Currently both testing and training modules create the additionally stored npy f
 
 Alongside that, the datasets must be set downloaded or set up accordingly to the aforementioned slicing. Otherwise, ensure that the embedding functions are ignored via comments, and directly load the npy files and run them for training and prediction using the classifiers.
 
+The corresponding launchIDT.bat is a development batch file for convience of operation during development, and will be developed alongside a bash equivalent for ease of us as development continues.
+
 # Dataset Information
 The training module runs on ~4000 images, sourced from the following websites: 
 - https://huggingface.co/datasets/ideepankarsharma2003/AIGeneratedImages_Midjourney for Midjourney generated AI images (1000 images using training split)

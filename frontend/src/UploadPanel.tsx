@@ -9,11 +9,12 @@ import PreviewPanel from './PreviewPanel';
 type UploadPanelProps = {
     imageQueue: ImageInput[];
     onImageChange: (images: File[] | string) => void;
-    onDeleteImage: () => void;
+    onDeleteAllImages: () => void;
+    onDeleteChosenImage: (index: number) => void;
     onImagePrediction: () => Promise<void>;
 };
 
-export default function UploadPanel ({imageQueue, onImageChange, onDeleteImage, onImagePrediction}: UploadPanelProps) {
+export default function UploadPanel ({imageQueue, onImageChange, onDeleteAllImages, onDeleteChosenImage, onImagePrediction}: UploadPanelProps) {
     /* Use State Section */
     const [url, setURL] = useState<string>(""); /* State to hold image file */
     const [previewedImage, setPreviewedImage] = useState<number>(0); /* State to set what image is currently being previewed*/
@@ -54,10 +55,10 @@ export default function UploadPanel ({imageQueue, onImageChange, onDeleteImage, 
                         </section>
                         <div className="dividing-line"></div>   
                         <section className="right">
-                            <PreviewPanel imageQueue={imageQueue} previewedImage={previewedImage} onPreviewedImageChange={setPreviewedImage}/>
+                            <PreviewPanel imageQueue={imageQueue} previewedImage={previewedImage} onPreviewedImageChange={setPreviewedImage} onDeleteChosenImage={onDeleteChosenImage}/>
                             {(imageQueue.length > 0) && (
                                 <div className="button-container">
-                                    <button className="delete-button" onClick={onDeleteImage} disabled={imageQueue.length == 0}>Delete All</button>
+                                    <button className="delete-all-button" onClick={onDeleteAllImages} disabled={imageQueue.length == 0}>Delete All</button>
                                 </div>
                             )}
                         </section>

@@ -9,10 +9,11 @@ type PreviewPanelProps = {
     imageQueue: ImageInput[];
     previewedImage: number;
     onPreviewedImageChange: (previewedImage: number) => void;
+    onDeleteChosenImage?: (selectedImage: number) => void;
 }
 
 
-export default function PreviewPanel ({imageQueue, previewedImage, onPreviewedImageChange}: PreviewPanelProps) {
+export default function PreviewPanel ({imageQueue, previewedImage, onPreviewedImageChange, onDeleteChosenImage}: PreviewPanelProps) {
     //Constants and Hook Section
     const selectedThumbnailRef = useRef<HTMLButtonElement>(null);
     //UseEffect to move thumbnail section to currently selected image
@@ -43,6 +44,9 @@ export default function PreviewPanel ({imageQueue, previewedImage, onPreviewedIm
             <div className='preview-row'>
                     {imageQueue.length > 0 && (<button className='preview-button' onClick={() => handleMovePreview(previewedImage,imageQueue.length, "previous")}>{"<"}</button>)}
                     <div className="preview-section">
+                        {(imageQueue.length > 0) && onDeleteChosenImage && (
+                            <button className="delete-individual-button" onClick={() => onDeleteChosenImage(previewedImage)} disabled={imageQueue.length == 0}>X</button>
+                            )}
                         {imageQueue.length ? 
                             (<img className="preview-image" alt="Preview image" src={imageQueue[previewedImage].preview}/>)
                             :

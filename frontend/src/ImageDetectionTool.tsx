@@ -72,6 +72,16 @@ export default function ImageDetectionTool() {
             });
         setImageQueue([]);
     }
+
+    /* Delete Selected Image */ 
+    function handleChosenImage(imageIndex: number) {
+       // Remove preview from internal memory
+       if(imageQueue[imageIndex].kind === "file"){
+           URL.revokeObjectURL(imageQueue[imageIndex].preview);
+       }
+       //Remove image from Queue
+       setImageQueue(prevImages => prevImages.filter((_, index) => index !== imageIndex));
+    }
     
 
     /* Reset page to remove old image */
@@ -116,7 +126,7 @@ export default function ImageDetectionTool() {
         <div>
             {/*Section for image input and submission to model*/}
             {page === "submit" && <UploadPanel imageQueue={imageQueue}
-                                   onImageChange={handleImageUpload} onDeleteImage={handleDeleteAllImages} onImagePrediction={handleImagePrediction}/>}
+                                   onImageChange={handleImageUpload} onDeleteAllImages={handleDeleteAllImages} onDeleteChosenImage={handleChosenImage} onImagePrediction={handleImagePrediction}/>}
             {/*Loading screen to prevent additional inputs while the client is waiting for response*/}
             {page === "loading" && <LoadingPanel/>}
             {/*Section for model prediction output*/}

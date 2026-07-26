@@ -5,9 +5,6 @@ import upload_icon from "./upload_icon.svg"
 import PreviewPanel from './PreviewPanel';
 
 // Type section
-// Type to handle moving previewed image via arrows 
-type Direction = "next" | "previous";
-
 // Relevant props to operate Panel
 type UploadPanelProps = {
     imageQueue: ImageInput[];
@@ -23,20 +20,6 @@ export default function UploadPanel ({imageQueue, onImageChange, onDeleteImage, 
     /*Loading screen to prevent additional inputs while the client is waiting for response*/
     const {getRootProps, getInputProps, isDragActive} = useDropzone({ accept: {"image/*": []}, multiple: true, onDrop: (acceptedFiles) => onImageChange(acceptedFiles)})
 
-    function handleMovePreview(previewedImage: number, queueLength: number, direction: Direction){
-       //Handle empty queues 
-       if (!queueLength){
-          return;   
-       }
-
-       //Determine increment or decrement to Previewed Image
-       const change = (direction === "next") ? 1 : -1
-
-       //Update previewed image, accounting for each edge case via wrap around
-       setPreviewedImage(previewedImage => ((previewedImage + change + queueLength)) % queueLength); 
-
-
-    }
     return (
                 <div className="page">
                     <header>

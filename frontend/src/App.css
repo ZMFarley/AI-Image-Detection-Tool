@@ -90,6 +90,15 @@
   font-weight: bolder;
 }
 
+.transition-button:hover{
+  opacity: .90;
+  transform: scale(1.05);
+}
+
+.transition-button:active{
+  transform: scale(.95) translateY(2px);
+}
+
 .transition-button:disabled{
   cursor: not-allowed;
 }
@@ -104,6 +113,15 @@
   color: black;
   background-color: lightcoral;
   border-color: black;
+}
+
+.delete-button:hover{
+  opacity: .90;
+  transform: scale(1.05);
+}
+
+.delete-button:active{
+  transform: scale(.95) translateY(2px);
 }
 
 .delete-button:disabled {
@@ -128,6 +146,15 @@
   box-shadow: 0 10px 15px grey;
 }
 
+.dropzone:hover{
+  opacity: .85;
+  transform: scale(1.05);
+}
+
+.dropzone:active{
+  transform: scale(.95) translateY(2px);
+}
+
 .preview-section {
   flex: 1;
   display: flex;
@@ -146,10 +173,14 @@
 }
 
 .preview-image{
-  object-fit: contain;
+  display: block;
+  width: auto;
+  height: auto;
   max-height: 400px;
-  max-width: min(100%, 600px)
+  max-width: min(100%, 600px);
+  border-radius: 12px;
 }
+
 .url-catcher-container {
   flex: 1;
   display: flex;
@@ -167,6 +198,12 @@
   box-shadow: 0 10px 15px grey;
 }
 
+.url-catcher-container:focus-within {
+    box-shadow:
+      0 0 0 6px #0f2257,
+      0 10px 15px grey;
+}
+
 .url-catcher {
   width: 400px;
   height: 36px;
@@ -178,6 +215,9 @@
   font-size: 1rem;
 }
 
+.url-catcher:focus-visible {
+    outline: 3px solid #5b7ace;
+}
 .upload-panel-text{
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.3rem;
@@ -200,6 +240,15 @@
   color: white;
   background-color: navy;
   border-color: black;
+}
+
+.url-submitter:hover{
+  opacity: .85;
+  transform: scale(1.05);
+}
+
+.url-submitter:active{
+  transform: scale(.95) translateY(2px);
 }
 
 .url-submitter:disabled{
@@ -228,7 +277,7 @@
   height: 100px;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 .thumbnail-button{
@@ -239,7 +288,9 @@
   aspect-ratio: 1;
   background: none;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 6px solid transparent;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .result-ai {
@@ -267,4 +318,56 @@
   border: 2px solid transparent;
   background: transparent;
   font-weight: bolder;
+}
+
+.preview-button:hover {
+  color: #0843e4;
+  transform: scale(1.15);
+} 
+
+.preview-button:active {
+   color: #071131;
+  transform: scale(.95);
+} 
+.selected-thumbnail{
+  border-color: #0f2257;
+  transform: scale(1.05);
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.thumbnail-section::-webkit-scrollbar {
+    height: 13px;
+}
+
+.thumbnail-section::-webkit-scrollbar-track {
+    background: lightgray;
+}
+
+.thumbnail-section::-webkit-scrollbar-thumb {
+    background: #0f2257;
+    border-radius: 15px;
+}
+
+.thumbnail-section::-webkit-scrollbar-thumb:active {
+    background-color: #071333;
+}
+
+.loading-text{
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 1px 0;
+  color: #0f2257;
+  animation: fade 3.0s ease-in-out infinite;
+}
+
+@keyframes fade {
+  0%, 100%{
+    opacity: 1
+  }
+  50% {
+    opacity: .15;
+  }
 }

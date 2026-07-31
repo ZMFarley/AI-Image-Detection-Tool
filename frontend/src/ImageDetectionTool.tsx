@@ -83,7 +83,6 @@ export default function ImageDetectionTool() {
        setImageQueue(prevImages => prevImages.filter((_, index) => index !== imageIndex));
     }
     
-
     /* Reset page to remove old image */
     function handleReset(){
         handleDeleteAllImages();

@@ -6,7 +6,7 @@ export default function LoadingPanel () {
                 <div className="page">
                     {/*SVG sourced from https://magecdn.com/tools/svg-loaders/loader1/*/}
                     <div className="container">
-                        <img alt="loading spinner" src={loadingSpinner} width="1000" height="1000"/>
+                        <img alt="loading spinner" src={loadingSpinner} width="9000" height="900"/>
                     </div>
                     <p className= "loading-text">Loading...</p>
                 </div> 

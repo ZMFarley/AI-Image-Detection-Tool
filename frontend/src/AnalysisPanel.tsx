@@ -1,5 +1,6 @@
 import type { Prediction } from "./ImageDetectionTool";
 import type { ImageInput } from "./ImageDetectionTool";
+import ConfidenceGauge from "./ConfidenceGauge";
 import PreviewPanel from './PreviewPanel';
 import { useState } from 'react';
 type AnalysisPanelProps = {
@@ -20,22 +21,15 @@ export default function AnalysisPanel ({imageQueue, responses, onReset }: Analys
                     </header>
                     {/*Input section for image*/}
                     <main className="container">
-                        <section className="left">
+                        <section className="analysis left">
                             <h1 className="subtitle">Image Analysis</h1>
                             <div className="results">
                             {/*Conditionals to output model predictions*/}
-                            {displayedResponse?.result === 0  && 
-                                <>
-                                    <h1 className="result-real">Real Image Detected</h1>
-                                    <h2>The model has predicted this image is NOT AI Generated</h2> 
-                                    <h3>with {(displayedResponse?.probReal * 100).toFixed(2)}% certainty</h3>
-                                </>}
-                            {displayedResponse?.result === 1  && 
-                                <>
-                                    <h1 className="result-ai">AI-Generated Image Detected</h1>
-                                    <h2>The model has predicted this image is AI Generated</h2>
-                                    <h3>with {(displayedResponse?.probAI * 100).toFixed(2)}% certainty</h3>
-                            </>}
+                            {displayedResponse?.result === 0 ? 
+                                <h1 className="result-real">Likely Real </h1> : 
+                                <h1 className="result-ai">Likely AI Generated</h1>}
+                            <ConfidenceGauge probReal={(displayedResponse?.probReal * 100)} probAI={(displayedResponse?.probAI * 100)} ></ConfidenceGauge>
+
                             </div>  
                             <div className="button-container">      
                                 <button className="transition-button" onClick={onReset}>Click to test another image!</button>
